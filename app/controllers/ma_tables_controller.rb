@@ -56,7 +56,34 @@ class MaTablesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  ################################################################
+  def export_pptx
+    # Crée une nouvelle présentation PowerPoint
+    @deck = Powerpoint::Presentation.new
+  
+    # Création d'une slide d'introduction
+    @deck.add_intro("Exportation des Enregistrements", "Généré à partir de MaTable")
+  
+    # Parcourt tous les enregistrements de la table MaTable
+    MaTable.all.each_with_index do |entry, index|
+      # Crée une slide textuelle pour chaque enregistrement
+      title = "Enregistrement ##{index + 1}"
+      content = [
+        "Nom: #{entry.name}",
+        "Âge: #{entry.age}",
+        "Description: #{entry.description}"
+      ]
+      @deck.add_textual_slide(title, content)
+    end
+  
+    # Enregistrer la présentation dans un fichier temporaire
+    file_path = Rails.root.join("tmp", "ma_table_#{Date.today}.pptx")
+    @deck.save(file_path.to_s)
+  
+    # Envoyer le fichier au client
+    send_file file_path.to_s, type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', filename: "ma_table_#{Date.today}.pptx"
+  end  
+########################################################################
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ma_table
