@@ -7,3 +7,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+MaTable.create([
+  { name: 'Thomas', age: 23, description: 'Developpeur Passioné' },
+  { name: 'Eric', age: 64, description: 'Steward de talent' },
+  { name: 'David', age: 54, description: 'Employé engagé' }
+])
